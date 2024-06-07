@@ -1,2 +1,2 @@
 # noob-c-project
-fuck c project~~~!!!
+c project~~~!!!
