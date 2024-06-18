@@ -31,36 +31,25 @@ void menu(void);	//菜单函数
 void scandate(void);	//输入数据 
 void printdate(void);	//打印数据 
 void rank(void);	//排序学生成绩 
-void search_score(void){
-	system("cls");
-	char name[20];
-	int i;
-	printf("请输入需要查询学生的名字：\n");
-	scanf("%s",&name);
-	for(i=0;i<count;i++){
-		if((strcmp(name,menbers[i].name))==0){
-			printf("%s的语文成绩为：%d，数学成绩为：%d，英语成绩为：%d",menbers[i].name,menbers[i].ch_score,menbers[i].mt_score,menbers[i].en_score);
-		}	
-	}
-}
-void scandate_flie(void){	//扫描txt内的数据 
-	FILE *fp;
-	int i;
-	fp=fopen("date.txt","r+");
-	fscanf(fp,"%d\n",&count);
-	for(i=0;i<count;i++)
-	fscanf(fp,"%s %s %s %d %d %d %d\n",menbers[i].name,menbers[i].sex,menbers[i].std_nmb,&menbers[i].ch_score,&menbers[i].mt_score,&menbers[i].en_score,&menbers[i].sum_score); 
-	fclose(fp);
-} 
-void print_flie(void){	//将结构体的数据提取到txt 
-	FILE *fp;
-	int i;
-	fp=fopen("date.txt","w+");
-	fprintf(fp,"%d\n",count);
-	for(i=0;i<count;i++)
-	fprintf(fp,"%s %s %s %d %d %d %d\n",menbers[i].name,menbers[i].sex,menbers[i].std_nmb,menbers[i].ch_score,menbers[i].mt_score,menbers[i].en_score,menbers[i].sum_score);
-	fclose(fp);
-} 
+void search_score(void);	//根据名字查询分数 
+void scandate_flie(void);	//扫描txt内的数据 
+void print_flie(void);		//将txt数据传到结构体 
+//void analyze(void){
+//	int i; 
+//	printf("优秀\t良好\t一般\t差"); 
+//	for(i=0;i<count;i++){
+//		if(menbers[i].sum_score>360)
+//			printf("\n%s",menbers[i].name);
+//		if(menbers[i].sum_score>160)
+//			printf("\t%s",menbers[i].name);
+//		if(menbers[i].sum_score>140)
+//			printf("\t\t%s",menbers[i].name);
+//		if(menbers[i].sum_score>120)
+//			printf("\t\t%s",menbers[i].name);
+//			
+//	}
+//}
+ 
 int main(){
 	scandate_flie();
 	while(1){
@@ -78,6 +67,8 @@ int main(){
 		case'3':rank();
 				break;
 		case'4':search_score();
+				break;
+		case'5':analyze();
 				break;
 		case'0':
 				printf("Bye Bye!\n");
@@ -99,16 +90,34 @@ void menu(void){
 	printf("*             2.打印学生成绩            *\n");
 	printf("*             3.根据成绩排名            *\n");
 	printf("*             4.查询学生成绩            *\n");
-	printf("*             5.计算最高成绩            *\n");
+	printf("*             5.分析学生成绩            *\n");
 	printf("*             6.计算最低成绩            *\n");
 	printf("*             0.退出程序                *\n");
 	prtstar(41);
 	printf("\n");
 }
+void scandate_flie(void){	//扫描txt内的数据 
+	FILE *fp;
+	int i;
+	fp=fopen("date.txt","r+");
+	fscanf(fp,"%d\n",&count);
+	for(i=0;i<count;i++)
+	fscanf(fp,"%s %s %s %d %d %d %d\n",menbers[i].name,menbers[i].sex,menbers[i].std_nmb,&menbers[i].ch_score,&menbers[i].mt_score,&menbers[i].en_score,&menbers[i].sum_score); 
+	fclose(fp);
+} 
+void print_flie(void){	//将结构体的数据提取到txt 
+	FILE *fp;
+	int i;
+	fp=fopen("date.txt","w+");
+	fprintf(fp,"%d\n",count);
+	for(i=0;i<count;i++)
+	fprintf(fp,"%s %s %s %d %d %d %d\n",menbers[i].name,menbers[i].sex,menbers[i].std_nmb,menbers[i].ch_score,menbers[i].mt_score,menbers[i].en_score,menbers[i].sum_score);
+	fclose(fp);
+} 
 void scandate(void){ 
 	char choose;
 	do{
-	if(count>0){
+	if(choose>0){
 		prtstar(21);
 		putchar('\n');
 	}
@@ -153,5 +162,17 @@ void rank(){	//排序学生总成绩
 			}
 		}
 	printdate();
+}
+void search_score(void){	//根据名字查询分数 
+	system("cls");
+	char name[20];
+	int i;
+	printf("请输入需要查询学生的名字：\n");
+	scanf("%s",&name);
+	for(i=0;i<count;i++){
+		if((strcmp(name,menbers[i].name))==0){
+			printf("%s的语文成绩为：%d，数学成绩为：%d，英语成绩为：%d",menbers[i].name,menbers[i].ch_score,menbers[i].mt_score,menbers[i].en_score);
+		}	
+	}
 }
 
