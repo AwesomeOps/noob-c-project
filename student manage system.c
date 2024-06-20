@@ -7,7 +7,7 @@
 #define STD_NMBSIZE 15
 #define SEXSIZE 5
 #define MENBERS 100
-struct student{
+struct student{		
 	char name[NAMESIZE];
 	char sex[SEXSIZE];
 	char std_nmb[STD_NMBSIZE];
@@ -16,17 +16,18 @@ struct student{
 	int en_score;
 	int sum_score;	
 };
-struct student menbers[MENBERS];
-struct student ex[MENBERS];
-struct student fi[MENBERS];
-struct student nm[MENBERS];
+struct student menbers[MENBERS];	//存储所有学生数据的结构体 
+struct student ex[MENBERS];		//存储优秀学生数据的结构体 
+struct student fi[MENBERS];		//存储良好学生数据的结构体 
+struct student nm[MENBERS];		//存储一般学生数据的结构体 
+struct student fl[MENBERS];		//存储不及格学生数据的结构体 
 int count=0;	//记录输入数据数量 
-void prtstar(int a){	//打印 *号 
+void prtstar(int a){	//打印 *号的函数 
 	int i;
 	for(i=0;i<a;i++)
 	printf("*");
 }	
-void prtspace(int a){	//打印' '字符
+void prtspace(int a){	//打印' '字符的函数 
 	int i;
 	for(i=0;i<a;i++)
 	printf(" ");
@@ -43,28 +44,33 @@ void change_stu(void){
 	scandate_flie();
 	int i;
 	int a;
+	char ch;
 	printf("   姓名\t性别\t学号\t\t语文\t数学\t英语\t总分\n"); 
 	for (i=0;i<count;i++)
 	printf("%d. %s\t%s\t%s\t%d\t%d\t%d\t%d\n"
 	,i+1,menbers[i].name,menbers[i].sex,menbers[i].std_nmb,menbers[i].ch_score,menbers[i].mt_score,menbers[i].en_score
-	,menbers[i].ch_score+menbers[i].mt_score+menbers[i].en_score);	
-	puts("请输入要修改学生的序号：");
-	scanf("%d",&a);
-	getchar();
-	puts("请输入学生姓名:"); 
-	gets(menbers[a-1].name);
-	puts("请输入学生性别:"); 
-	gets(menbers[a-1].sex);
-	puts("请输入学生学号:"); 
-	gets(menbers[a-1].std_nmb);
-	puts("请输入语文成绩:");
-	scanf("%d",&menbers[a-1].ch_score);
-	puts("请输入数学成绩:");
-	scanf("%d",&menbers[a-1].mt_score);
-	puts("请输入英语成绩:");
-	scanf("%d",&menbers[a-1].en_score);
-	menbers[a-1].sum_score=menbers[a-1].ch_score+menbers[a-1].mt_score+menbers[a-1].en_score;
-	
+	,menbers[i].ch_score+menbers[i].mt_score+menbers[i].en_score);
+	do{
+		puts("请输入要修改学生的序号：");
+		scanf("%d",&a);
+		getchar();
+		puts("请输入学生姓名:"); 
+		gets(menbers[a-1].name);
+		puts("请输入学生性别:"); 
+		gets(menbers[a-1].sex);
+		puts("请输入学生学号:"); 
+		gets(menbers[a-1].std_nmb);
+		puts("请输入语文成绩:");
+		scanf("%d",&menbers[a-1].ch_score);
+		puts("请输入数学成绩:");
+		scanf("%d",&menbers[a-1].mt_score);
+		puts("请输入英语成绩:");
+		scanf("%d",&menbers[a-1].en_score);
+		menbers[a-1].sum_score=menbers[a-1].ch_score+menbers[a-1].mt_score+menbers[a-1].en_score;
+		printf("是否继续修改学生信息(y/n)\n");
+		ch=_getch();
+	}
+	while(ch=='y');
 } 
 
 int main(){
@@ -110,8 +116,8 @@ void menu(void){
 	printf("*             3.根据成绩排名            *\n");
 	printf("*             4.查询学生成绩            *\n");
 	printf("*             5.分析学生成绩            *\n");
-	printf("*             6.计算最低成绩            *\n");
-	printf("*             0.退出程序                *\n");
+	printf("*             6.修改学生信息            *\n");
+	printf("*             0.exit                    *\n");
 	prtstar(41);
 	printf("\n");
 }
@@ -196,16 +202,12 @@ void search_score(void){	//根据名字查询分数
 }
 void analyze(void){
 	int i; 
-	char ch;
+	char ch,ch2;
 	print_flie();
 	int count_ex=0;
 	int count_fi=0;
 	int count_nm=0;
 	int count_fl=0;
-	struct student ex[MENBERS];
-	struct student fi[MENBERS];
-	struct student nm[MENBERS];
-	struct student fl[MENBERS];
 	for(i=0;i<count;i++){
 		if(menbers[i].sum_score>270){
 			strcpy(ex[count_ex].name,menbers[i].name);
@@ -252,8 +254,10 @@ void analyze(void){
 			continue;
 		}		
 	} 
-	printf("1.打印成绩优秀学生 2.打印成绩良好学生 3.打印成绩一般学生 4.打印不及格学生\n");
-	ch=_getch();
+	do{
+		system("cls");
+		printf("1.打印成绩优秀学生 2.打印成绩良好学生 3.打印成绩一般学生 4.打印不及格学生\n");
+		ch=_getch();
 	switch(ch){
 		case '1':
 			system("cls");
@@ -295,9 +299,20 @@ void analyze(void){
 			getchar();
 			system("cls");
 			break;
+		case '5':
+			fp=fopen("analyze.txt","w+");
+			fprintf(fp,"%d\n",count);
+			for(i=0;i<count_ex;i++)
+			fprintf(fp,"%s %s %s %d %d %d %d\n",ex[i].name,ex[i].sex,ex[i].std_nmb,ex[i].ch_score,ex[i].mt_score,ex[i].en_score,ex[i].sum_score);
+			fclose(fp);
 		case '0':
 			exit(0);
 	}
+	printf("是否继续分析学生信息(y/n)\n");
+	ch2=_getch();
+	}
+	while(ch2=='y');
 }
+	
  
 
